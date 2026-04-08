@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASD Fitness</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <span class="badge">ASD Fitness</span>
+      <h1>تطبيقك الرياضي على الويب</h1>
+      <p>اختَر نظامك التدريبي، سجّل أوزانك، واحسب نظامك الغذائي بسهولة.</p>
+      <a class="btn" href="#app">ابدأ الآن</a>
+    </div>
+  </header>
+
+  <main id="app" class="container">
+    <section class="card">
+      <h2>اختر نظامك التدريبي</h2>
+      <div class="grid">
+        <button class="choice active" data-split="push-pull-legs">Push Pull Legs</button>
+        <button class="choice" data-split="bro-split">كل يوم عضلة</button>
+        <button class="choice" data-split="full-body">فل بدي</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>تركيز الحصة الحالية</h2>
+      <p id="focusText">صدر علوي</p>
+      <button id="nextFocusBtn" class="btn secondary">الحصة التالية</button>
+    </section>
+
+    <section class="card">
+      <h2>تسجيل الأوزان</h2>
+      <div class="form-grid">
+        <input id="exercise" placeholder="اسم التمرين" value="Incline Press" />
+        <input id="weight" type="number" placeholder="الوزن" />
+        <input id="reps" type="number" placeholder="التكرارات" />
+        <button id="saveBtn" class="btn">حفظ</button>
+      </div>
+      <ul id="logList" class="log-list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>حاسبة غذائية</h2>
+      <div class="form-grid">
+        <input id="bodyWeight" type="number" placeholder="الوزن بالكيلو" />
+        <select id="goal">
+          <option value="cut">تنشيف</option>
+          <option value="bulk">تضخيم</option>
+        </select>
+        <button id="calcBtn" class="btn">احسب</button>
+      </div>
+      <p id="nutritionResult">أدخل وزنك واختر الهدف.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
