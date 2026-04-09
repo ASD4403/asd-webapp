@@ -1,59 +1,35 @@
-const focusMap = {
-  "push-pull-legs": ["صدر علوي", "صدر وسط", "صدر سفلي"],
-  "bro-split": ["صدر علوي", "ظهر علوي", "أكتاف جانبي"],
-  "full-body": ["صدر علوي", "رجل أمامية", "ظهر عرض"]
-};
+const supabase = window.supabase.createClient(
+  "https://itlfzjdjeneamgvwapee.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0bGZ6amRqZW5lYW1ndndhcGVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2ODI3NzUsImV4cCI6MjA5MTI1ODc3NX0.WN6_cUXgq-6yAZPh5z-aMQ6oduZrgv7TPLKTLC0G3Ng"
+);
 
-let currentSplit = "push-pull-legs";
-let focusIndex = 0;
+document.body.innerHTML = `
+  <div style="max-width:420px;margin:60px auto;padding:20px;background:#111827;border:1px solid #1f2937;border-radius:16px;color:white;font-family:sans-serif">
+    <h1 style="margin-top:0">ASD Fitness Login</h1>
+    <input id="email" type="email" placeholder="Email" style="width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #374151;background:#0b0d12;color:white" />
+    <input id="password" type="password" placeholder="Password" style="width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #374151;background:#0b0d12;color:white" />
+    <button id="signup" style="width:100%;padding:12px;margin-top:10px;border:none;border-radius:10px;background:#2563eb;color:white">إنشاء حساب</button>
+    <button id="signin" style="width:100%;padding:12px;margin-top:10px;border:none;border-radius:10px;background:#1f2937;color:white">تسجيل دخول</button>
+    <p id="msg" style="margin-top:14px;color:#cbd5e1"></p>
+  </div>
+`;
 
-const focusText = document.getElementById("focusText");
-const logList = document.getElementById("logList");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const msg = document.getElementById("msg");
 
-function renderFocus() {
-  focusText.textContent = focusMap[currentSplit][focusIndex];
-}
+document.getElementById("signup").addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
-document.querySelectorAll(".choice").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".choice").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentSplit = btn.dataset.split;
-    focusIndex = 0;
-    renderFocus();
-  });
+  const { error } = await supabase.auth.signUp({ email, password });
+  msg.textContent = error ? error.message : "تم إنشاء الحساب أو إرسال رابط التفعيل";
 });
 
-document.getElementById("nextFocusBtn").addEventListener("click", () => {
-  focusIndex = (focusIndex + 1) % focusMap[currentSplit].length;
-  renderFocus();
-});
+document.getElementById("signin").addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
-document.getElementById("saveBtn").addEventListener("click", () => {
-  const exercise = document.getElementById("exercise").value.trim();
-  const weight = document.getElementById("weight").value.trim();
-  const reps = document.getElementById("reps").value.trim();
-  if (!exercise || !weight || !reps) return;
-  const li = document.createElement("li");
-  li.textContent = `${exercise} — ${weight} كجم × ${reps}`;
-  logList.prepend(li);
-  document.getElementById("weight").value = "";
-  document.getElementById("reps").value = "";
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  msg.textContent = error ? error.message : "تم تسجيل الدخول بنجاح";
 });
-
-document.getElementById("calcBtn").addEventListener("click", () => {
-  const weight = Number(document.getElementById("bodyWeight").value);
-  const goal = document.getElementById("goal").value;
-  const result = document.getElementById("nutritionResult");
-  if (!weight) {
-    result.textContent = "أدخل وزنك أولًا.";
-    return;
-  }
-  const calories = goal === "bulk" ? weight * 34 : weight * 26;
-  const protein = Math.round(weight * 2);
-  const fats = Math.round(weight * 0.8);
-  const carbs = Math.round((calories - protein * 4 - fats * 9) / 4);
-  result.textContent = `السعرات: ${Math.round(calories)} — بروتين: ${protein}غ — كارب: ${carbs}غ — دهون: ${fats}غ`;
-});
-
-renderFocus();
